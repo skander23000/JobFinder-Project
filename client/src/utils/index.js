@@ -72,7 +72,7 @@ export const updateURL = ({
     params.set("exp", exp);
   }
 
-  const newURL = `${location.pathname}? ${params.toString()}`;
+  const newURL = `${location.pathname}?${params.toString()}`;
   navigate(newURL, { replace: true });
   return newURL;
 };
