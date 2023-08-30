@@ -38,7 +38,7 @@ const Companies = () => {
         url: newURL,
         method: "GET",
       });
-      console.log(res?.data);
+      console.log(newURL);
       setNumPage(res?.numOfPage);
       setRecordsCount(res?.total);
       setData(res?.data);

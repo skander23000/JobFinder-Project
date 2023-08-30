@@ -248,7 +248,20 @@ export const deleteJobPost = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    await Jobs.findByIdAndDelete(id);
+    // Find the deleted job post
+    const deletedJobPost = await Jobs.findByIdAndDelete(id);
+
+    // Update the company's jobPosts array
+    const companyId = deletedJobPost.company;
+    const company = await Companies.findById(companyId);
+
+    // Remove the deleted job post's _id from the jobPosts array
+    company.jobPosts = company.jobPosts.filter(
+      (jobId) => jobId.toString() !== id
+    );
+
+    // Save the updated company
+    await company.save();
 
     res.status(200).send({
       success: true,
