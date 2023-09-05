@@ -134,6 +134,7 @@ export const getJobPosts = async (req, res, next) => {
     if (jtype) {
       queryObject.jobType = { $in: types };
     }
+    console.log(experience);
 
     //    [2. 6]
 

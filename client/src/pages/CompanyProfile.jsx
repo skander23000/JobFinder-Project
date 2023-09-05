@@ -216,6 +216,7 @@ const CompanyProfile = () => {
         url: "/companies/get-company/" + id,
         method: "GET",
       });
+
       setInfo(res?.data);
       console.log(res.data);
       setIsLoading(false);

@@ -66,7 +66,7 @@ export const updateURL = ({
     params.set("sort", sort);
   }
   if (jType) {
-    params.set("jType", jType);
+    params.set("jtype", jType);
   }
   if (exp) {
     params.set("exp", exp);
