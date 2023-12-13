@@ -10,7 +10,6 @@ import { apiRequest } from "../utils";
 
 const JobDetail = () => {
   const { id } = useParams();
-
   const { user } = useSelector((state) => state.user);
 
   const [job, setJob] = useState(null);
@@ -23,7 +22,7 @@ const JobDetail = () => {
 
     try {
       const res = await apiRequest({
-        url: "/jobs/get-job-detail/" + id,
+        url: `/jobs/get-job-detail/${id}`,
         method: "GET",
       });
       setJob(res?.data);
@@ -40,7 +39,7 @@ const JobDetail = () => {
     try {
       if (window.confirm("Delete Job Post?")) {
         const res = await apiRequest({
-          url: "/jobs/delete-job/" + job?._id,
+          url: `/jobs/delete-job/${job?._id}`,
           token: user?.token,
           method: "DELETE",
         });
@@ -53,6 +52,29 @@ const JobDetail = () => {
     } catch (error) {
       setIsFetching(false);
       console.log(error);
+    }
+  };
+
+  const applyNow = async () => {
+    setIsFetching(true);
+    try {
+      // Make an API request to apply for the job
+      const res = await apiRequest({
+        url: `/jobs/apply/${job?._id}`, // Update the endpoint to your API
+        token: user?.token,
+        method: "POST", // Use the appropriate HTTP method (POST, PUT, etc.)
+      });
+
+      if (res?.success) {
+        // Handle the success case, e.g., show a success message
+        alert(res?.message);
+        // You can also update the UI or navigate the user to a different page
+      }
+      setIsFetching(false);
+    } catch (error) {
+      setIsFetching(false);
+      console.log(error);
+      // Handle the error case, e.g., show an error message to the user
     }
   };
 
@@ -117,7 +139,7 @@ const JobDetail = () => {
               <div className="bg-[#fed0ab] w-40 h-16 px-6 rounded-lg flex flex-col items-center justify-center">
                 <span className="text-sm">No. of Applicants</span>
                 <p className="text-lg font-semibold text-gray-700">
-                  {job?.applicants?.length}K
+                  {job?.application?.length}
                 </p>
               </div>
 
@@ -125,6 +147,13 @@ const JobDetail = () => {
                 <span className="text-sm">No. of Vacancies</span>
                 <p className="text-lg font-semibold text-gray-700">
                   {job?.vacancies}
+                </p>
+              </div>
+
+              <div className="bg-[#ffcddf] w-40 h-16 px-6 rounded-lg flex flex-col items-center justify-center">
+                <span className="text-sm">Yr. of Experience</span>
+                <p className="text-lg font-semibold text-gray-700">
+                  {job?.experience}
                 </p>
               </div>
             </div>
@@ -193,6 +222,7 @@ const JobDetail = () => {
               ) : (
                 <CustomButton
                   title="Apply Now"
+                  onClick={applyNow}
                   containerStyles={`w-full flex items-center justify-center text-white bg-black py-3 px-5 outline-none rounded-full text-base`}
                 />
               )}

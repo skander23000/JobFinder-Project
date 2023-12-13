@@ -6,7 +6,7 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 
 import Header from "../components/Header";
 import { experience, jobTypes, jobs } from "../utils/data";
-import { CustomButton, JobCard, ListBox } from "../components";
+import { CustomButton, JobCard, ListBox, Loading } from "../components";
 import { apiRequest, updateURL } from "../utils";
 
 const FindJobs = () => {
@@ -65,7 +65,21 @@ const FindJobs = () => {
   };
 
   const filterExperience = async (e) => {
-    setFilterExp(e);
+    if (expVal?.includes(e)) {
+      setExpVal(expVal.filter((el) => el !== e));
+    } else {
+      setExpVal([...expVal, e]);
+    }
+  };
+
+  const handleSearchSubmit = async (e) => {
+    e.preventDefault();
+    await fetchJobs();
+  };
+
+  const handleShowMore = async (e) => {
+    e.preventDefault();
+    setPage((prev) => prev + 1);
   };
 
   useEffect(() => {
@@ -80,6 +94,8 @@ const FindJobs = () => {
       newExpVal?.sort((a, b) => a - b);
 
       setFilterExp(`${newExpVal[0]}-${newExpVal[newExpVal?.length - 1]}`);
+    } else {
+      setFilterExp([]);
     }
   }, [expVal]);
 
@@ -92,7 +108,7 @@ const FindJobs = () => {
       <Header
         title="Find Your Dream Job with Ease"
         type="home"
-        handleClick={() => {}}
+        handleClick={handleSearchSubmit}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         location={jobLocation}
@@ -161,7 +177,7 @@ const FindJobs = () => {
         <div className="w-full md:w-5/6 px-5 md:px-0">
           <div className="flex items-center justify-between mb-4">
             <p className="text-sm md:text-base">
-              Shwoing: <span className="font-semibold">{recordCount}</span> Jobs
+              Showing: <span className="font-semibold">{recordCount}</span> Jobs
               Available
             </p>
 
@@ -184,9 +200,15 @@ const FindJobs = () => {
             })}
           </div>
 
+          {isFetching && (
+            <div className="py-10">
+              <Loading />
+            </div>
+          )}
           {numPage > page && !isFetching && (
             <div className="w-full flex items-center justify-center pt-16">
               <CustomButton
+                onclick={handleShowMore}
                 title="Load More"
                 containerStyles={`text-blue-600 py-1.5 px-5 focus:outline-none hover:bg-blue-700 hover:text-white rounded-full text-base border border-blue-600`}
               />
