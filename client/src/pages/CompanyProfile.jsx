@@ -36,12 +36,12 @@ const CompnayForm = ({ open, setOpen }) => {
 
     const url = profileImage && (await hanldeFileUpload(profileImage));
 
-    const newData = url ? { ...data, profileUrl: url } : data;
+    const newData_ = url ? { ...data, profileUrl: url } : data;
     try {
       const res = await apiRequest({
         url: "/companies/update-company",
         token: user?.token,
-        data: newData,
+        data: newData_,
         method: "PUT",
       });
       setIsLoading(false);
@@ -52,7 +52,7 @@ const CompnayForm = ({ open, setOpen }) => {
         setErrMsg({ status: "success", message: res.message });
         const newData = { token: res?.token, ...res?.user };
         dispatch(Login(newData));
-        localStorage.setItem("userInfo", JSON.stringify(data));
+        localStorage.setItem("userInfo", JSON.stringify(newData_));
 
         setTimeout(() => {
           window.location.reload();
