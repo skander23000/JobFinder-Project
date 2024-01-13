@@ -31,12 +31,16 @@ function MenuList({ user, onClick }) {
                 {user?.jobTitle ?? user?.email}
               </span>
             </div>
+            {user?.profileUrl ? (
+              <img
+                src={user?.profileUrl}
+                alt="user profile"
+                className="w-10 h-10 rounded-full object-cover "
+              />
+            ) : (
+              ""
+            )}
 
-            <img
-              src={user?.profileUrl}
-              alt="user profile"
-              className="w-10 h-10 rounded-full object-cover "
-            />
             <BiChevronDown
               className="h-8 w-8 text-slate-600"
               aria-hidden="true"
